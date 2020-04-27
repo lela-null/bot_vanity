@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'chat',
-	description: 'Custom chat feature.',
+	description: 'Custom chat feature',
 	guildOnly: false,
 	execute(client, message, args) {
         let executableChannels = ["516894709663399937", "499419055967436801"];
