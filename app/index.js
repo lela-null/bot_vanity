@@ -51,18 +51,17 @@ client.once('ready', () => {
 
 //run on message
 client.on('message', message => {
-    console.log(message);
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) {
+        message.content = `-chat ${message.content}`;
+    };
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 //if message is not a command, stop
-	if (!command) {
-        message = `-chat ${message}`;
-        console.log(message);
-    };
+	if (!command) return;
 
 //check if message is guildOnly
 	if (command.guildOnly && message.channel.type !== 'text') {
