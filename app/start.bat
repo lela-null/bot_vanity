@@ -1,7 +1,7 @@
 echo off
-title Core [Bot]
+title Vanity [Bot]
 cls
-echo Restart delay for Bot Core
+echo Restart delay for Vanity [Bot]
 timeout /t 3
 cls
 nodemon --ignore memory/ --ignore disabled/ --ignore config/

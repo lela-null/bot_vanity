@@ -1,7 +1,11 @@
 module.exports = {
-	name: 'time',
-	cooldown: 5,
-    args: false,
+	name: `time`,
+	aliases: [``],
+	description: `Check the server's time.`,
+	args: false,
+	usage: ``,
+	guildOnly: false,
+	cooldown: 1,
     execute(client, message, args) {
         let tTime = new Date().getTime();
         tTime = new Date(tTime).toLocaleTimeString();

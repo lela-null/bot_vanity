@@ -2,8 +2,13 @@ const fs = require("fs");
 const { ownerId } = require('../config.json');
 
 module.exports = {
-	name: 'status',
-	description: 'Beep!',
+	name: `status`,
+	aliases: [``],
+	description: `Set the bot's status.`,
+	args: true,
+	usage: `[status], LISTENING, WATCHING, PLAYING`,
+	guildOnly: false,
+	cooldown: 1,
 	execute(client, message, args) {
 		if(message.member.id != ownerId) return;
         setActivity = JSON.parse(fs.readFileSync("./memory/setActivity.json", "utf8"));

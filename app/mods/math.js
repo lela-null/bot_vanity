@@ -1,7 +1,11 @@
 module.exports = {
-	name: 'math',
-	cooldown: 10,
-    args: true,
+	name: `math`,
+	aliases: ['='],
+	description: `Evaluate a math equation.`,
+	args: true,
+	usage: `[]`,
+	guildOnly: false,
+	cooldown: 1,
     execute(client, message, args) {
         //evaluate code
             function clean(text) {

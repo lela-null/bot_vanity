@@ -3,7 +3,7 @@
 //CONST
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, botID} = require('./config.json');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -39,8 +39,12 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
     client.fetchApplication()
-        .then(application => console.log(`\nObtained application with name: ${application.name}, owned by ${application.owner.username}.`))
+        .then(application => console.log(`\n[${time}] - Obtained application with name: ${application.name}[Bot], owned by ${application.owner.tag}.`))
+        .then(application => console.log(`=======================================================================================`))
+        .then(application => console.log(`[TIME]---------[USER]-------------[COMMAND]`))
         .catch(console.error);
         setActivity = JSON.parse(fs.readFileSync("./memory/setActivity.json", "utf8"));
         var game = setActivity.game;
@@ -51,9 +55,9 @@ client.once('ready', () => {
 
 //run on message
 client.on('message', message => {
-    if (message.author.bot) return;
+    if (message.author.bot && !message.author.id == botID) return;
     if (!message.content.startsWith(prefix)) {
-        message.content = `-chat ${message.content}`;
+        message.content = `-no_command ${message.content}`;
     };
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
@@ -61,7 +65,7 @@ client.on('message', message => {
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 //if message is not a command, stop
-	if (!command) return;
+	if (command.name == "no_command" && message.author.id == client.user.id) return;
 
 //check if message is guildOnly
 	if (command.guildOnly && message.channel.type !== 'text') {
@@ -95,6 +99,11 @@ client.on('message', message => {
 		}
 	}
 	timestamps.set(message.author.id, now);
+    if (command.name != "no_command") {
+        let time = new Date().getTime();
+        time = new Date(time).toLocaleTimeString();
+        console.log(`[${time}] - ${message.author.tag} ran ${message.content}`);
+    }
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
 

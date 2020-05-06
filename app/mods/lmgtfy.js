@@ -1,7 +1,11 @@
 module.exports = {
-	name: 'lmgtfy',
+	name: `lmgtfy`,
+	aliases: ['?'],
+	description: ``,
+	args: true,
+	usage: `[question]`,
+	guildOnly: false,
 	cooldown: 10,
-    args: false,
     execute(client, message, args) {
         if(!args.slice(0)) return;
         args = args.join("+");

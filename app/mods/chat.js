@@ -1,18 +1,22 @@
 module.exports = {
-	name: 'chat',
-	description: 'Custom chat feature',
-	guildOnly: false,
+	name: `chat`,
+	aliases: [''],
+	description: `Custom chat feature.`,
+	args: false,
+	usage: ``,
+	guildOnly: true,
+	cooldown: 0,
 	execute(client, message, args) {
         let executableChannels = ["516894709663399937", "499419055967436801"];
         if(!executableChannels.includes(message.channel.id)) return;
 
 		let input = {
-
 		}
 
 		let output = {
 
 		}
+
 
 		let badWords = ["fuck", "fucker", "fucking", "bitch", "cunt", "dick", "nigger", "nigga", "spick", "chink", "zazi", "bigot", "shit", "bastard", "asshole", "douchbag", "pussy", "piss", ];
 
@@ -150,19 +154,5 @@ const config = require("../config.json");
 		            };
 		        };
 		    };
-
-		//catch errors
-		    if (!responseArray) return;
-		    if (cLog == null) return;
-		    let responseMax = responseArray.length;
-		    var rand = Math.floor(Math.random() * responseMax);
-		    let response = responseArray[rand];
-
-		//send console and server message
-		    let tTime = new Date().getTime();
-		    tTime = new Date(tTime).toLocaleTimeString();
-		    console.log(`[${tTime} ${message.author}] - ${cLog}`);
-		    return message.channel.send(response);
-
 		}
 	}

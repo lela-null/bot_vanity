@@ -1,11 +1,13 @@
 const { prefix } = require('../config.json');
 
 module.exports = {
-	name: 'help',
-	description: 'List all of my commands or info about a specific command.',
-	aliases: ['commands'],
-	usage: '[command name]',
-	cooldown: 5,
+	name: `help`,
+	aliases: [''],
+	description: `Get help with the bot\'s commands.`,
+	args: false,
+	usage: ``,
+	guildOnly: false,
+	cooldown: 60,
 	execute(client, message, args) {
         const data = [];
         const { commands } = message.client;
@@ -15,15 +17,7 @@ module.exports = {
             data.push(commands.map(command => command.name).join(', '));
             data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
-            return message.author.send(data, { split: true })
-            	.then(() => {
-            		if (message.channel.type === 'dm') return;
-            		message.reply('I\'ve sent you a DM with all my commands!');
-            	})
-            	.catch(error => {
-            		console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
-            		message.reply('it seems like I can\'t DM you! Do you have DMs disabled?');
-            	});
+            return message.channel.send(data, { split: true })
         }
         const name = args[0].toLowerCase();
         const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
