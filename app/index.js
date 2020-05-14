@@ -65,7 +65,8 @@ client.on('message', message => {
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 //if message is not a command, stop
-	if (command.name == "no_command" && message.author.id == client.user.id) return;
+    if (command === undefined) return;
+    if (command.name == "no_command" && message.author.id == client.user.id) return;
 
 //check if message is guildOnly
 	if (command.guildOnly && message.channel.type !== 'text') {
