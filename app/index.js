@@ -119,20 +119,22 @@ client.on('message', message => {
 
 //on leave
 client.on("guildMemberRemove", async member => {
-    let tTime = new Date().getTime();
-    tTime = new Date(tTime).toLocaleTimeString();
-    let welcomechannel = member.guild.channels.find(c => c.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`:x: [${tTime}] ${member.user.tag} has left the community.`);
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
+    console.log(`[${time}] - ${member.user.tag} left the community`);
+    let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
+    welcomechannel.send(`:x: [${time}] ${member.user.tag} has left the community.`);
 });
 
 
 
 //on join
 client.on("guildMemberAdd", async member => {
-    let tTime = new Date().getTime();
-    tTime = new Date(tTime).toLocaleTimeString();
-    let welcomechannel = member.guild.channels.find(c => c.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`:o: [${tTime}] ${member.user.tag} has joined the community.`);
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
+    console.log(`[${time}] - ${member.user.tag} joined the community`);
+    let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
+    welcomechannel.send(`:o: [${time}] ${member.user.tag} has joined the community.`);
 });
 
 client.login(token);
