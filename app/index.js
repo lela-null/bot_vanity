@@ -1,30 +1,31 @@
-//version 2019.12.01
-
 //CONST
-const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, botID} = require('./config.json');
-
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 client.commands = new Discord.Collection();
-
+const { prefix, token, botID } = require('./config.json');
+const fs = require('fs');
+const cooldowns = new Discord.Collection();
 const commandFiles = fs.readdirSync('./mods').filter(file => file.endsWith('.js'));
 
-//install memory setActivity
-let setActivity;
+//install config setActivity
+let setPresence;
 try {
-    setActivity = JSON.parse(fs.readFileSync("./memory/setActivity.json", "utf8"));
+    setPresence = JSON.parse(fs.readFileSync("./config/setPresence.json", "utf8"));
+    console.log(setPresence);
 } catch(_) {
-    setActivity = {
-        game: "Hello World",
-        type: "PLAYING"
+    setPresence = {
+        activity: {
+            name: "v:CARROT",
+            type: "PLAYING"
+        },
+        status: 'online'
     };
-    var data = JSON.stringify(setActivity, null, 4);
-    var path = "./memory/setActivity.json";
+    var data = JSON.stringify(setPresence, null, 4);
+    var path = "./config/setPresence.json";
     fs.writeFile(path, data, "utf8", (err) => {
         if(err) console.log(err);
     });
-    console.log("Created setActivity.json in /memory/ folder.");
+    console.log("Created setPresence.json in /config/ folder.");
 };
 
 //load the mods
@@ -35,9 +36,7 @@ for (const file of commandFiles) {
 	console.log(`    ${command.name}`);
 }
 
-//make a coodown collection
-const cooldowns = new Discord.Collection();
-
+//on ready set status
 client.once('ready', () => {
     let time = new Date().getTime();
     time = new Date(time).toLocaleTimeString();
@@ -46,19 +45,27 @@ client.once('ready', () => {
         .then(application => console.log(`=======================================================================================`))
         .then(application => console.log(`[TIME]---------[USER]-------------[COMMAND]`))
         .catch(console.error);
-        setActivity = JSON.parse(fs.readFileSync("./memory/setActivity.json", "utf8"));
-        var game = setActivity.game;
-        var type = setActivity.type;
-        client.user.setActivity(game, {type: type});
+
+    setPresence = JSON.parse(fs.readFileSync("./config/setPresence.json", "utf8"));
+    var name = setPresence.activity.name;
+    var type = setPresence.activity.type;
+    var status = setPresence.status;
+    client.user.setPresence({
+        activity: {
+            name: name,
+            type: type
+        },
+        status: status
+    })
+    .then(console.log(`[${time}] - status ${type} ${name} as ${status}.`))
+    .catch(console.error);
 });
 
 
 //run on message
 client.on('message', message => {
-    if (message.author.bot && !message.author.id == botID) return;
-    if (!message.content.startsWith(prefix)) {
-        message.content = `-no_command ${message.content}`;
-    };
+    if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName)
@@ -66,7 +73,6 @@ client.on('message', message => {
 
 //if message is not a command, stop
     if (command === undefined) return;
-    if (command.name == "no_command" && message.author.id == client.user.id) return;
 
 //check if message is guildOnly
 	if (command.guildOnly && message.channel.type !== 'text') {
@@ -100,11 +106,9 @@ client.on('message', message => {
 		}
 	}
 	timestamps.set(message.author.id, now);
-    if (command.name != "no_command") {
-        let time = new Date().getTime();
-        time = new Date(time).toLocaleTimeString();
-        console.log(`[${time}] - ${message.author.tag} ran ${message.content}`);
-    }
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
+    console.log(`[${time}] - ${message.author.tag} ran ${message.content}`);
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
 
@@ -117,13 +121,68 @@ client.on('message', message => {
 
 });
 
-//on leave
-client.on("guildMemberRemove", async member => {
+
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch();
+	if (reaction.partial) await reaction.fetch();
+    if (!reaction.message.channel.name.endsWith("get_roles")) return;
+    if (reaction.message.id != "650016483295887360") return;
+    let tempReaction = reaction.emoji.name;
+    let tempMember = reaction.message.guild.members.cache.get(user.id);
+    if (tempReaction == "_developer") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Development"));
+        tempMember.roles.add(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_minecraft") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Minecraft"));
+        tempMember.roles.add(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_youtube") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("YouTube"));
+        tempMember.roles.add(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
     let time = new Date().getTime();
     time = new Date(time).toLocaleTimeString();
-    console.log(`[${time}] - ${member.user.tag} left the community`);
-    let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`:x: [${time}] ${member.user.tag} has left the community.`);
+    console.log(`[${time}] - ${user.tag} reacted ${reaction.emoji.name}`);
+});
+
+
+
+client.on('messageReactionRemove', async (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch();
+	if (reaction.partial) await reaction.fetch();
+    if (!reaction.message.channel.name.endsWith("get_roles")) return;
+    if (reaction.message.id != "650016483295887360") return;
+    let tempReaction = reaction.emoji.name;
+    let tempMember = reaction.message.guild.members.cache.get(user.id);
+    if (tempReaction == "_developer") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Development"));
+        tempMember.roles.remove(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_minecraft") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Minecraft"));
+        tempMember.roles.remove(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_youtube") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("YouTube"));
+        tempMember.roles.remove(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
+    console.log(`[${time}] - ${user.tag} reacted ${reaction.emoji.name}`);
 });
 
 
@@ -134,7 +193,20 @@ client.on("guildMemberAdd", async member => {
     time = new Date(time).toLocaleTimeString();
     console.log(`[${time}] - ${member.user.tag} joined the community`);
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`:o: [${time}] ${member.user.tag} has joined the community.`);
+    welcomechannel.send(`\`\`\`diff\n+ [${time}] ${member.user.tag} has joined the community.\`\`\``);
 });
+
+
+
+//on leave
+client.on("guildMemberRemove", async member => {
+    let time = new Date().getTime();
+    time = new Date(time).toLocaleTimeString();
+    console.log(`[${time}] - ${member.user.tag} left the community`);
+    let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
+    welcomechannel.send(`\`\`\`diff\n- [${time}] ${member.user.tag} has left the community.\`\`\``);
+});
+
+
 
 client.login(token);
