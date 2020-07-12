@@ -19,7 +19,7 @@ module.exports = {
 		type =	setPresence.activity.type;
 		status = setPresence.status;
 
-//get slector
+//get selector
 		let selector = args[0];
 		args.shift();
 		args = args.join(" ");
