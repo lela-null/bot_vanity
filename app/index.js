@@ -130,12 +130,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.message.id != "650016483295887360") return;
     let tempReaction = reaction.emoji.name;
     let tempMember = reaction.message.guild.members.cache.get(user.id);
-    if (tempReaction == "_community") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Community"));
-        tempMember.roles.add(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
-    }
     if (tempReaction == "_developer") {
         let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Development"));
         tempMember.roles.add(tempRole);
@@ -166,7 +160,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 });
 
 
-
 client.on('messageReactionRemove', async (reaction, user) => {
     if (reaction.message.partial) await reaction.message.fetch();
 	if (reaction.partial) await reaction.fetch();
@@ -186,8 +179,14 @@ client.on('messageReactionRemove', async (reaction, user) => {
         reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
             .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
     }
-    if (tempReaction == "_youtube") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("YouTube"));
+    if (tempReaction == "_streaming") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Streaming"));
+        tempMember.roles.remove(tempRole);
+        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
+            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_gamer") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Gamer"));
         tempMember.roles.remove(tempRole);
         reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
             .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
