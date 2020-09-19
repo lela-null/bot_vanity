@@ -222,7 +222,14 @@ client.on("guildMemberAdd", async member => {
     time = new Date(time).toLocaleTimeString();
     console.log(`[${time}] - ${member.user.tag} joined the community`);
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`\`\`\`diff\n+ [${time}] ${member.user.tag} has joined the community.\`\`\``);
+    const joinembed = new Discord.MessageEmbed()
+			.setColor('#88ff88')
+			.setTitle('A new member has joined.')
+			.setThumbnail(member.user.displayAvatarURL())
+			.addField('User Tag', member.user.tag)
+			.addField('User ID ', member.user.id)
+			.addField('Mention', member, true)
+		welcomechannel.send(joinembed);
 });
 
 
@@ -233,7 +240,14 @@ client.on("guildMemberRemove", async member => {
     time = new Date(time).toLocaleTimeString();
     console.log(`[${time}] - ${member.user.tag} left the community`);
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`\`\`\`diff\n- [${time}] ${member.user.tag} has left the community.\`\`\``);
+    const leaveembed = new Discord.MessageEmbed()
+			.setColor('#ff8888')
+			.setTitle('An old member has left.')
+			.setThumbnail(member.user.displayAvatarURL())
+			.addField('User Tag', member.user.tag)
+			.addField('User ID ', member.user.id)
+			.addField('Mention', member, true)
+		welcomechannel.send(leaveembed);
 });
 
 
