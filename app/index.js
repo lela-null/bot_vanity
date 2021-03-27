@@ -124,35 +124,44 @@ client.on('message', message => {
 
 
 client.on('messageReactionAdd', async (reaction, user) => {
+    msgid = "754139168115916801"
     if (reaction.message.partial) await reaction.message.fetch();
 	if (reaction.partial) await reaction.fetch();
     if (!reaction.message.channel.name.endsWith("get_roles")) return;
-    if (reaction.message.id != "650016483295887360") return;
+    if (reaction.message.id != msgid) return;
     let tempReaction = reaction.emoji.name;
     let tempMember = reaction.message.guild.members.cache.get(user.id);
-    if (tempReaction == "_developer") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Development"));
-        tempMember.roles.add(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    if (tempReaction == "_red") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_red"));
+        tempMember.roles.add(tempRole)
     }
-    if (tempReaction == "_minecraft") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Minecraft"));
+    if (tempReaction == "_orange") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_orange"));
         tempMember.roles.add(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
     }
-    if (tempReaction == "_streaming") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Streaming"));
+    if (tempReaction == "_yellow") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_yellow"));
         tempMember.roles.add(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
     }
-    if (tempReaction == "_gamer") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Gamer"));
+    if (tempReaction == "_green") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_green"));
         tempMember.roles.add(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n+ added role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_cyan") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_cyan"));
+        tempMember.roles.add(tempRole);
+    }
+    if (tempReaction == "_blue") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_blue"));
+        tempMember.roles.add(tempRole);
+    }
+    if (tempReaction == "_purple") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_purple"));
+        tempMember.roles.add(tempRole);
+    }
+    if (tempReaction == "_pink") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_pink"));
+        tempMember.roles.add(tempRole);
     }
     let time = new Date().getTime();
     time = new Date(time).toLocaleTimeString();
@@ -161,35 +170,44 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 
 client.on('messageReactionRemove', async (reaction, user) => {
+    msgid = "754139168115916801"
     if (reaction.message.partial) await reaction.message.fetch();
 	if (reaction.partial) await reaction.fetch();
     if (!reaction.message.channel.name.endsWith("get_roles")) return;
-    if (reaction.message.id != "650016483295887360") return;
+    if (reaction.message.id != msgid) return;
     let tempReaction = reaction.emoji.name;
     let tempMember = reaction.message.guild.members.cache.get(user.id);
-    if (tempReaction == "_developer") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Development"));
-        tempMember.roles.remove(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    if (tempReaction == "_red") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_red"));
+        tempMember.roles.remove(tempRole)
     }
-    if (tempReaction == "_minecraft") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Minecraft"));
+    if (tempReaction == "_orange") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_orange"));
         tempMember.roles.remove(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
     }
-    if (tempReaction == "_streaming") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Streaming"));
+    if (tempReaction == "_yellow") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_yellow"));
         tempMember.roles.remove(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
     }
-    if (tempReaction == "_gamer") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("Gamer"));
+    if (tempReaction == "_green") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_green"));
         tempMember.roles.remove(tempRole);
-        reaction.message.channel.send(`${user}\`\`\`diff\n- removed role ${tempRole.name}.\`\`\``)
-            .then(tempMessage => tempMessage.delete({ timeout: 5000 }));
+    }
+    if (tempReaction == "_cyan") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_cyan"));
+        tempMember.roles.remove(tempRole);
+    }
+    if (tempReaction == "_blue") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_blue"));
+        tempMember.roles.remove(tempRole);
+    }
+    if (tempReaction == "_purple") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_purple"));
+        tempMember.roles.remove(tempRole);
+    }
+    if (tempReaction == "_pink") {
+        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_pink"));
+        tempMember.roles.remove(tempRole);
     }
     let time = new Date().getTime();
     time = new Date(time).toLocaleTimeString();
@@ -204,7 +222,14 @@ client.on("guildMemberAdd", async member => {
     time = new Date(time).toLocaleTimeString();
     console.log(`[${time}] - ${member.user.tag} joined the community`);
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`\`\`\`diff\n+ [${time}] ${member.user.tag} has joined the community.\`\`\``);
+    const joinembed = new Discord.MessageEmbed()
+			.setColor('#88ff88')
+			.setTitle('A new member has joined.')
+			.setThumbnail(member.user.displayAvatarURL())
+			.addField('User Tag', member.user.tag)
+			.addField('User ID ', member.user.id)
+			.addField('Mention', member, true)
+		welcomechannel.send(joinembed);
 });
 
 
@@ -215,7 +240,14 @@ client.on("guildMemberRemove", async member => {
     time = new Date(time).toLocaleTimeString();
     console.log(`[${time}] - ${member.user.tag} left the community`);
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
-    welcomechannel.send(`\`\`\`diff\n- [${time}] ${member.user.tag} has left the community.\`\`\``);
+    const leaveembed = new Discord.MessageEmbed()
+			.setColor('#ff8888')
+			.setTitle('An old member has left.')
+			.setThumbnail(member.user.displayAvatarURL())
+			.addField('User Tag', member.user.tag)
+			.addField('User ID ', member.user.id)
+			.addField('Mention', member, true)
+		welcomechannel.send(leaveembed);
 });
 
 
