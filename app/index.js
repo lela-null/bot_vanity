@@ -7,27 +7,6 @@ const fs = require('fs');
 const cooldowns = new Discord.Collection();
 const commandFiles = fs.readdirSync('./mods').filter(file => file.endsWith('.js'));
 
-//install config setActivity
-let setPresence;
-try {
-    setPresence = JSON.parse(fs.readFileSync("./config/setPresence.json", "utf8"));
-    console.log(setPresence);
-} catch(_) {
-    setPresence = {
-        activity: {
-            name: "v:CARROT",
-            type: "PLAYING"
-        },
-        status: 'online'
-    };
-    var data = JSON.stringify(setPresence, null, 4);
-    var path = "./config/setPresence.json";
-    fs.writeFile(path, data, "utf8", (err) => {
-        if(err) console.log(err);
-    });
-    console.log("Created setPresence.json in /config/ folder.");
-};
-
 //load the mods
 console.log("Loading mods...");
 for (const file of commandFiles) {
@@ -65,7 +44,7 @@ client.once('ready', () => {
 //run on message
 client.on('message', message => {
     if (message.author.bot) return;
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.startsWith(prefix)) message.content = "-chat " + message.content;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName)
@@ -95,7 +74,7 @@ client.on('message', message => {
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 1) * 1000;
+	const cooldownAmount = (command.cooldown || 0) * 1000;
 
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
@@ -121,101 +100,6 @@ client.on('message', message => {
 
 });
 
-
-
-client.on('messageReactionAdd', async (reaction, user) => {
-    msgid = "754139168115916801"
-    if (reaction.message.partial) await reaction.message.fetch();
-	if (reaction.partial) await reaction.fetch();
-    if (!reaction.message.channel.name.endsWith("get_roles")) return;
-    if (reaction.message.id != msgid) return;
-    let tempReaction = reaction.emoji.name;
-    let tempMember = reaction.message.guild.members.cache.get(user.id);
-    if (tempReaction == "_red") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_red"));
-        tempMember.roles.add(tempRole)
-    }
-    if (tempReaction == "_orange") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_orange"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_yellow") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_yellow"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_green") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_green"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_cyan") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_cyan"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_blue") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_blue"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_purple") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_purple"));
-        tempMember.roles.add(tempRole);
-    }
-    if (tempReaction == "_pink") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_pink"));
-        tempMember.roles.add(tempRole);
-    }
-    let time = new Date().getTime();
-    time = new Date(time).toLocaleTimeString();
-    console.log(`[${time}] - ${user.tag} reacted ${reaction.emoji.name}`);
-});
-
-
-client.on('messageReactionRemove', async (reaction, user) => {
-    msgid = "754139168115916801"
-    if (reaction.message.partial) await reaction.message.fetch();
-	if (reaction.partial) await reaction.fetch();
-    if (!reaction.message.channel.name.endsWith("get_roles")) return;
-    if (reaction.message.id != msgid) return;
-    let tempReaction = reaction.emoji.name;
-    let tempMember = reaction.message.guild.members.cache.get(user.id);
-    if (tempReaction == "_red") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_red"));
-        tempMember.roles.remove(tempRole)
-    }
-    if (tempReaction == "_orange") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_orange"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_yellow") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_yellow"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_green") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_green"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_cyan") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_cyan"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_blue") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_blue"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_purple") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_purple"));
-        tempMember.roles.remove(tempRole);
-    }
-    if (tempReaction == "_pink") {
-        let tempRole = reaction.message.guild.roles.cache.find(r => r.name.endsWith("_pink"));
-        tempMember.roles.remove(tempRole);
-    }
-    let time = new Date().getTime();
-    time = new Date(time).toLocaleTimeString();
-    console.log(`[${time}] - ${user.tag} reacted ${reaction.emoji.name}`);
-});
-
-
-
 //on join
 client.on("guildMemberAdd", async member => {
     let time = new Date().getTime();
@@ -224,7 +108,7 @@ client.on("guildMemberAdd", async member => {
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
     const joinembed = new Discord.MessageEmbed()
 			.setColor('#88ff88')
-			.setTitle('A new member has joined.')
+			.setTitle('A new member has entered the library.')
 			.setThumbnail(member.user.displayAvatarURL())
 			.addField('User Tag', member.user.tag)
 			.addField('User ID ', member.user.id)
@@ -242,7 +126,7 @@ client.on("guildMemberRemove", async member => {
     let welcomechannel = member.guild.channels.cache.find(channel => channel.name.endsWith("joins_and_leaves"));
     const leaveembed = new Discord.MessageEmbed()
 			.setColor('#ff8888')
-			.setTitle('An old member has left.')
+			.setTitle('An old member has left the library.')
 			.setThumbnail(member.user.displayAvatarURL())
 			.addField('User Tag', member.user.tag)
 			.addField('User ID ', member.user.id)
